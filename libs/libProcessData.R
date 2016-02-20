@@ -2,8 +2,17 @@
 # library for processing data from MLSF Project, Feb-2016
 ###############################################################
 
+###########################################################################
+# read the classify result from weka output
+###########################################################################
+readWekaResult <- function(resultPath, fileName)  {
+  result = read.csv(paste(resultPath, fileName, sep=""), skip = 4)
+  return (result[,2:3])  
+}
+###########################################################################
 # merge row data from path1 and path2, both in csv format
 # if removeIndex != 0, the col with removeIndex in 2. dataset will be removed
+###########################################################################
 mergeRowData <- function(path1, path2, nameIndex1, nameIndex2, removeIndex = 0, createFakeValue = FALSE) {
   data1 = read.csv(path1, na.strings=c(".", "NA", "", "?"))
   data2 = read.csv(path2, na.strings=c(".", "NA", "", "?"))
@@ -32,9 +41,9 @@ mergeRowData <- function(path1, path2, nameIndex1, nameIndex2, removeIndex = 0, 
   
   return (mergeData)
 }
-
+###########################################################################
 # merge col data from path1 and path2, both in csv format
-# 
+###########################################################################
 mergeColData <- function(path1, path2) {
   data1 = read.csv(path1, na.strings=c(".", "NA", "", "?"))
   data2 = read.csv(path2, na.strings=c(".", "NA", "", "?"))  
@@ -43,7 +52,9 @@ mergeColData <- function(path1, path2) {
   return (mergeData)
 }
 
+###########################################################################
 # merge description data from 2 sets to 1 set (in other words, create combi desc data)
+###########################################################################
 mergeDesc <- function(dataPath, CASFset, trainingSet, createFakeValue = FALSE) {
   print(CASFset)
   path1 = paste(dataPath, CASFset, "_RMSD_", trainingSet, "-", DESCRIPTORS[1], ".csv", sep="")
@@ -64,4 +75,3 @@ mergeDesc <- function(dataPath, CASFset, trainingSet, createFakeValue = FALSE) {
   #  path123 = paste(dataPath, CASFset,"_elementsv2-SIFt-xscore.csv", sep="")
   #  write.table(mergeData123, file = path123, sep = ",", quote=FALSE, row.names = FALSE)  
 }
-

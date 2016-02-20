@@ -1,10 +1,8 @@
 source("lib/configuration.R")
 source("lib/lib.analysis.R")
 
-#resultPath = "/Users/knight/Dropbox/data/"
 resultPath = "/home/dat/WORK/output/results/2015-06-23/"
 
-#IDPath = "/Users/knight/Dropbox/data/"
 IDPath = "/home/dat/WORK/DB/DESCRIPTORS/June-2015/process/"
 
 #
@@ -154,7 +152,7 @@ for (target in dockingMethods) {
 testingRMSD <- function() {
 
   resultFile = "CASF14_refined_RMSD_DIG10.2_RoF-RT_elementsv2-SIFt_c12b0_SP.csv"
-  
+
   IDFile = "DIG10.2_elementsv2-SIFt_c12b0_SP_process.csv"
   
   predictFile = "CASF14_refined_DIG10.2_RoF-RT_elementsv2-SIFt_c12b0_SP.csv"
@@ -181,4 +179,4 @@ testingRMSD <- function() {
   print(cor(TRUE_RANK_CSAR13, rank(-rankpose[,2]), method="spearman"))
   
 }
-testingRMSD()
+#testingRMSD()
