@@ -1,11 +1,4 @@
-source("lib/configuration.R")
-###########################################################################
-# DESC: read the classify result from weka output
-###########################################################################
-readWekaResult <- function(resultPath, fileName)  {
-  result = read.csv(paste(resultPath, fileName, sep=""), skip = 4)
-  return (result[,2:3])  
-}
+#source("lib/configuration.R")
 ###########################################################################
 # DESC: read the classify result from weka output, same as read weka, but with other params
 ###########################################################################

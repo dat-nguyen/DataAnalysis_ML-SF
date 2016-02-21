@@ -1,7 +1,7 @@
 ###############################################################
 # library for processing data from MLSF Project, Feb-2016
 ###############################################################
-
+source("libs/constConf.R")
 ###########################################################################
 # read the classify result from weka output
 ###########################################################################
@@ -51,21 +51,20 @@ mergeColData <- function(path1, path2) {
   
   return (mergeData)
 }
-
 ###########################################################################
 # merge description data from 2 sets to 1 set (in other words, create combi desc data)
 ###########################################################################
 mergeDesc <- function(dataPath, CASFset, trainingSet, createFakeValue = FALSE) {
-  print(CASFset)
+#  print(CASFset)
   path1 = paste(dataPath, CASFset, "_RMSD_", trainingSet, "-", DESCRIPTORS[1], ".csv", sep="")
   path2 = paste(dataPath, CASFset, "_RMSD_", trainingSet, "-", DESCRIPTORS[2], ".csv", sep="")
-  print(path1)
-  print(path2)
+#  print(path1)
+#  print(path2)
   # all training data always has the first col as the pKd/RMSD value, so after merging it needs to be removed to avoid redundant, that's why removeIndex = 1
   mergeData12 = mergeRowData(path1, path2, removeIndex = 1, createFakeValue=createFakeValue)
   # write to file
-  path12 = paste(dataPath, "processed/", CASFset, "_RMSD_", trainingSet, "-", DESCRIPTORS[1], "-", DESCRIPTORS[2], ".csv", sep="")
-  print(path12)
+  path12 = paste(dataPath, "Processed/", CASFset, "_RMSD_", trainingSet, "-", DESCRIPTORS[1], "-", DESCRIPTORS[2], ".csv", sep="")
+#  print(path12)
   write.table(mergeData12, file = path12, sep = ",", quote=FALSE, row.names = FALSE)
   
   # for merging the third desc set into one, but for later
@@ -75,3 +74,29 @@ mergeDesc <- function(dataPath, CASFset, trainingSet, createFakeValue = FALSE) {
   #  path123 = paste(dataPath, CASFset,"_elementsv2-SIFt-xscore.csv", sep="")
   #  write.table(mergeData123, file = path123, sep = ",", quote=FALSE, row.names = FALSE)  
 }
+
+###############################################################
+splitWekaResults <- function(resultPath, classifyMethod, combiName, matchPattern) {
+  fileName = paste(classifyMethod, "_", combiName, "-", DESCRIPTORS[1], "-", DESCRIPTORS[2], ".csv", sep="")
+  #print(fileName)
+  scores = readWekaResult(resultPath, fileName)
+  IDfile = paste(PROCESSED_DATA_PATH, combiName, "_", DESCRIPTORS[1], "-", DESCRIPTORS[2], ".csv", sep="")
+  IDdata = read.csv(IDfile, na.strings=c(".", "NA", "", "?"))
+  predictedData = IDdata[,1:2]
+  predictedData[,2] = scores[,2]
+  for (pat in matchPattern) {
+    matchData = predictedData[grep(pat, predictedData[,1]), ]
+    matchData[,1] = sub(paste(pat, "/", sep=""), "\\1", matchData[,1])
+    writeMatch2CSV(matchData, classifyMethod, pat)
+  }
+  #pat = "[A-Za-z0-9_-]+/"
+  #print( regexpr(pat, predictedData[1,1]))
+  #print( sub(pat, "\\1", predictedData[1,1]) )
+}
+###############################################################
+writeMatch2CSV <- function(matchData, classifyMethod, pat) {
+  fileName = paste(SPLIT_RESULT_PATH, classifyMethod, "_", pat, ".csv", sep="")
+  print(fileName)
+  write.table(matchData, file = fileName, sep = ",", quote=FALSE, row.names = FALSE)
+}
+###############################################################

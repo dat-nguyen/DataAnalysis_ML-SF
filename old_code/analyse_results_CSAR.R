@@ -1,11 +1,11 @@
-source("lib/configuration.R")
-source("lib/lib.analysis.R")
+source("old_code/lib/configuration.R")
+source("old_code/lib/lib.analysis.R")
 
-resultPath = "/home/dat/WORK/output/results/2015-06-23/"
+resultPath = "/home/dat/WORK/RESULTS/2015-06-23/"
 
 IDPath = "/home/dat/WORK/DB/DESCRIPTORS/June-2015/process/"
 
-#
+###############################################################
 calcSpearmanCor <- function(target, resultFile, IDFile, numberOfPoses = 3) {
   resultFile = paste(resultFile, "_", target, ".csv", sep="")
   #print(resultFile)
@@ -19,7 +19,7 @@ calcSpearmanCor <- function(target, resultFile, IDFile, numberOfPoses = 3) {
   rankTopPoses = rank(-topPoses[,2])
   return (cor(TRUE_RANK_CSAR13, rankTopPoses, method="spearman"))
 }
-#
+###############################################################
 calcSpearmanCorRMSD <- function(target, resultFile, IDFile, numberOfPoses = 3) {
   resultFile = paste(resultFile, "_", target, ".csv", sep="")
   #print(resultFile)
@@ -33,7 +33,7 @@ calcSpearmanCorRMSD <- function(target, resultFile, IDFile, numberOfPoses = 3) {
   rankTopPoses = rank(-topPoses[,2])
   return (cor(TRUE_RANK_CSAR13, rankTopPoses, method="spearman"))
 }
-
+###############################################################
 # with replate \NOT WORKING
 calcSpearmanCorRMSDWithReplace <- function(target, resultFile, IDFile, numberOfPoses = 3) {
   resultFile = paste(resultFile, "_", target, ".csv", sep="")
@@ -54,6 +54,7 @@ calcSpearmanCorRMSDWithReplace <- function(target, resultFile, IDFile, numberOfP
   rankTopPoses = rank(-topPoses[,2])
   return (cor(TRUE_RANK_CSAR13, rankTopPoses, method="spearman"))
 }
+###############################################################
 analyse_result_MLscoring <- function(trainingData, desc, numberOfPoses = 1, RMSD=FALSE) {
   result = data.frame(row.names=dockingMethods)
   for (trainingMethod in methods) {
@@ -78,7 +79,7 @@ analyse_result_MLscoring <- function(trainingData, desc, numberOfPoses = 1, RMSD
   rownames(result) = paste(trainingData, methods, desc, sep="_")
   return (result)
 }
-
+###############################################################
 runCalcSpearman <- function(RMSD=FALSE) {
   for (desc in descSets) {
     for (poses in c(1,3)) {
@@ -99,7 +100,7 @@ runCalcSpearman <- function(RMSD=FALSE) {
     }
   }
 }
-
+###############################################################
 #heatmap = heatmap[nrow(heatmap):1,]
 
 #mainLabel = paste(metricName, "on", evalSet, "set")
@@ -109,14 +110,14 @@ runCalcSpearman <- function(RMSD=FALSE) {
 #for (x in 1:ncol(heatmap))
 #  for (y in 1:nrow(heatmap))
 #    text(x, y+0.4, round(heatmap[y,x], digits = 3), cex = 1)
-
+###############################################################
 # ranking based on average of numberOfPoses best poses
 analyse_result_original_poses <- function(numberOfPoses) {
   for (method in dockingMethods) {
     print(method)
     poseList = read.csv(paste(IDPath, "cs-confgen_all_", method, ".csv", sep=""))
     topPoses = calc_average_bestpose(list_top_bestpose(poseList, numberOfPoses, IDindex = 1), IDindex = 1) 
-    print(topPoses)
+    #print(topPoses)
     rankTopPoses = rank(-topPoses[,2])
     print(rankTopPoses)
     print(cor(TRUE_RANK_CSAR13, rankTopPoses, method="spearman"))
@@ -163,6 +164,7 @@ testingRMSD <- function() {
   #test$actual = predict$predicted
   test = addID(test, IDPath, IDFile)
   
+  #print(test)
   #print(rank_bestpose(test, IDindex = 3))
   #x = list_top_bestpose(test, numberOfPoses = 1, IDindex = 3, decreasing = FALSE)
   #print(x)
