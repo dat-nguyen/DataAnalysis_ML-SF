@@ -3,9 +3,8 @@
 ###############################################################
 source("libs/libProcessData.R")
 matchPattern = c("Aminothiazoles_71_PB_md1_rst_Dat", "SmHDAC8_inhibitors", 
-                 "T36_JMJ_Xray_actives", "T36_JMJ_Xray_inactives", "T36_JMJ_Xray_test_gold", 
-                 "DIG_XP", "DIG_SP", "DIG_goldscore")
-TRUE_SCORES_PATH = "/home/dat/WORK/RESULTS/2016-02-23/true_scores/"
+                 TEST_SETS_KDM, 
+                 TEST_SETS_DIG)
 
 ###############################################################
 splitAllResults <- function() {
