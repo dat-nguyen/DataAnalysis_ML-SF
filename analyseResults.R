@@ -2,84 +2,65 @@
 # analyse the results for MLSF Project, Feb-2016
 ###############################################################
 source("libs/libProcessData.R")
-matchPattern = c("Aminothiazoles_71_PB_md1_rst_Dat", "SmHDAC8_inhibitors", 
-                 TEST_SETS_KDM, 
-                 TEST_SETS_DIG)
-
 ###############################################################
 splitAllResults <- function() {
   for (CASFset in CASF_SETS) {
     for (trainSet in TRAINING_SETS) {
       for (method in ML_METHODS) {
         classifyMethod = paste(CASFset, "_", trainSet, "_", method, sep="")
-        splitWekaResults(RESULT_PATH, classifyMethod, combiName="targets_2016-02-23", matchPattern)
+        splitWekaResults(IDPath = PROCESSED_DATA_PATH, classifyMethod, combiName="targets_2016-02-23", TARGET_LIST)
       }
     }
   } 
 }
-#splitAllResults()
 ###############################################################
-analyseDIG_test <- function() {
-  test = read.csv(file = "/home/dat/WORK/RESULTS/2016-02-23/splitted_results/CASFv2013-refined_sampling_100_RF__DIG_SP.csv")
-  score = read.csv(file = "/home/dat/WORK/RESULTS/2016-02-23/true_scores/DIG_SP.csv")
-  test = merge(test, score, by.x=1, by.y=1)
-  #print(test)
-  rankpose = list_top_bestpose(test, numberOfPoses = 3, IDindex = 1, decreasing = FALSE)
-  print(rankpose)
-  
-  rankpose = calc_average_bestpose(list_top_bestpose(test, numberOfPoses = 3, IDindex = 1, decreasing = FALSE), scoreIndex = 3, IDindex = 1)
-  rankpose[,2] = abs(rankpose[,2])
-  print(rankpose)
-  print(rank(-rankpose[,2]))
-  print(cor(TRUE_RANK_CSAR13, rank(-rankpose[,2]), method="spearman"))
-}
-###############################################################
-calcSpearmanCorRMSD <- function(target, classifyMethod, numberOfPoses = 1) {
-  resultFile = paste(SPLIT_RESULT_PATH, classifyMethod, "_", target, ".csv", sep="")
-  print(resultFile)
-  scoreFile = paste(TRUE_SCORES_PATH, target, ".csv", sep="")
-  print(scoreFile)
-  
-  result = mergeRowData(resultFile, scoreFile, nameIndex1 = 1, nameIndex2 = 1)
-  topPoses = calc_average_bestpose(list_top_bestpose(result, numberOfPoses, IDindex = 1, decreasing = FALSE), scoreIndex = 3, IDindex = 1) 
-  topPoses[,2] = abs(topPoses[,2])    
-  rankTopPoses = rank(-topPoses[,2])
-  return (cor(TRUE_RANK_DIG10.2, rankTopPoses, method="spearman"))
-}
-
-#print(calcSpearmanCorRMSD("DIG_SP", "CASFv2013-refined_sampling_clusters10_RoF_RoT"))
-###############################################################
-analyse_result_MLscoring <- function(CASFset, trainSet, numberOfPoses = 3) {
-  result = data.frame(row.names=dockingMethods)
-  for (method in ML_METHODS) {
-    suffix = "_RMSD_DIG10.2"  
-    classifyMethod = paste(CASFset, "_", trainSet, "_", method, sep="")
-    print(classifyMethod)
-    #IDFile = paste("DIG10.2_", desc, sep="")
-    test = sapply(matchPattern[6:8], calcSpearmanCorRMSD, classifyMethod, numberOfPoses = numberOfPoses)
-    result = rbind(result, test)
-  }
-  colnames(result) = matchPattern[6:8]
-  #rownames(result) = paste(trainingData, methods, desc, sep="_")
-  return (result)
-}
-print(analyse_result_MLscoring(CASF_SETS[2], TRAINING_SETS[1]))
-###############################################################
-runCalcSpearman <- function() {
-#  for (desc in DESC_SETS) {
-    for (CASFset in CASF_SETS) {
-      for (trainSet in TRAINING_SETS) {
-        for (poses in c(1,3)) {
-          endResult = analyse_result_MLscoring(CASFset, trainSet, numberOfPoses=poses) 
-          write.table(endResult, file = paste("Spearman_refined_RMSD_DIG10.2_", desc, "_Pose_", poses, ".csv",sep=""), sep=",")
-        }
+splitAllResults_Fidele <- function() {
+#  FideleList = c()
+#  for (target in TARGET_LIST_FIDELE) 
+#    for (target_db in TARGET_DB_FIDELE)  
+#      for (pose in POSES_GEN_LIST_FIDELE) 
+#          FideleList = c(FideleList, paste(target, target_db, pose, sep="-"))
+  for (CASFset in CASF_SETS) 
+    for (trainSet in TRAINING_SETS)
+      for (method in ML_METHODS) {
+        classifyMethod = paste(CASFset, "_", trainSet, "_", method, sep="")
+        splitWekaResults(IDPath = paste0(PROCESSED_DATA_PATH, "Fidele/"), classifyMethod, combiName="targets_Fidele_2016-02-23", FideleList)
       }
-    }
-#  }
+   
 }
+###############################################################
+createRMSDhistogram <- function(RMSDpath, pattern="sampling_cluster", mainText) {
+  allFiles = list.files(RMSDpath, pattern=pattern)
+  # create empty dataframe
+  RMSDall = read.csv(text="x,RMSD")
+  for (CSVfile in allFiles) {
+    RMSD = read.csv(paste0(RMSDpath, CSVfile), header=FALSE)
+    RMSDall = rbind(RMSDall, RMSD)
+  }
+  hist(RMSDall[,2], xlab="RMSD", col="lightblue", main=paste0(mainText, "\nNumber of samples: ", length(rownames(RMSDall))) )
+}
+###############################################################
+plotRMSDhistogram <- function(CASFyear=CASF_YEARS[1]) {
+  pdf(paste0(RESULT_PATH, "Hist_CASF",CASFyear,".pdf"), width = 12, height = 9)
+  par(mfrow = c(1,3))
+  RMSDpath = paste0(OUTPUT_RMSD, CASFyear, "/_sampling/")
+  #createRMSDhistogram(RMSDpath, pattern="1a", mainText=paste0("CASF",CASFyear," - Set A") )
+  createRMSDhistogram(RMSDpath, pattern="sampling_cluster", mainText=paste0("CASF",CASFyear," - Set A") )
+  createRMSDhistogram(RMSDpath, pattern="sampling_100"    , mainText=paste0("CASF",CASFyear," - Set B") )
+  RMSDpath = paste0(OUTPUT_RMSD, CASFyear, "/_pool/")
+  createRMSDhistogram(RMSDpath, pattern="RMSD", mainText=paste0("CASF",CASFyear," - All poses") )
+  dev.off()
+  
+}
+###############################################################
+# testing 
 ###############################################################
 #classifyMethod = "CASFv2007_sampling_clusters10_RoF_RoT"
-#classifyMethod = "CASFv2013-refined_sampling_clusters10_RoF_RoT"
-#classifyMethod = "CASFv2013-refined_sampling_100_RoF_RoT"
-#classifyMethod = "CASFv2013-refined_sampling_100_RF_"
-#splitWekaResults(RESULT_PATH, classifyMethod, combiName="targets_2016-02-23", matchPattern)
+#splitWekaResults(RESULT_PATH, classifyMethod, combiName="targets_2016-02-23", TARGET_LIST)
+###############################################################
+# main part
+###############################################################
+#splitAllResults()
+#splitAllResults_Fidele()
+#for (CASFyear in CASF_YEARS) 
+plotRMSDhistogram(CASF_YEARS[4]) 

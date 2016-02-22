@@ -81,8 +81,9 @@ combiAllTestData <- function(testPath, combiName) {
   
 }
 ###############################################################
-
-#createTrainingData(CASF_SETS[4])
+# main part
+###############################################################
+#createTrainingData(CASF_SETS[2])
 #createTestDataAll()
 #combiAllTestData(PROCESSED_DATA_PATH, "targets_2016-02-23")
 #combiAllTestData("/home/dat/WORK/DB/DESCRIPTORS/Processed/Fidele/", "targets_Fidele_2016-02-23")

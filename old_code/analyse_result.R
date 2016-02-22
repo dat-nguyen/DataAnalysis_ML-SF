@@ -19,7 +19,7 @@ createPlot <- function(result, evalSet="actives", data="", desc="", method="") {
   rValue = round(sqrt(calcValidationMetric(x,y)$r2.pred), digits=3)
   title(main=paste("R=", rValue, "on", evalSet, "set (", length(x), "complexes)\n", data, method, desc ,sep=" "))
 }
-
+###########################################################################
 # DESC: reanalysis the CASF 
 analysis_CASF <- function() {
   for (desc in descSets) {
@@ -40,14 +40,13 @@ analysis_CASF <- function() {
     }
   }
 }
-
+###########################################################################
 #analysis_CASF()
-
+###########################################################################
 #createHeatmap(metric = "r2.pearson", dataSets, methods, path2Result, evalSet=trainingSets[1], protein=proteinList[1], desc, testSet="actives")
 ###########################################################################
 # DESC: analysis for the actives set
 ###########################################################################
-
 analyseActivesSet <- function(path2Result, dataSet, trainSet, protein, method, desc, cutoff = 12, binsize = 0) {
   activesName = paste(path2Result, dataSet, "_", trainSet, "_", protein, "_", method, "_", concatCutoffAndBinsize(desc, cutoff, binsize), "_actives.csv", sep="")  
   activesList = read.csv(activesName, skip = 4)
@@ -56,7 +55,7 @@ analyseActivesSet <- function(path2Result, dataSet, trainSet, protein, method, d
   #print(calcValidationMetric(activesList[,1], activesList[,2])$r2.pred)
   createPlot(activesList, data=paste(dataSet, trainSet), desc=desc, method=method)
 }
-
+###########################################################################
 # DESC: analysis for the actives set only
 analysis_actives_set <- function() {
 
@@ -75,7 +74,7 @@ analysis_actives_set <- function() {
     }
   }
 }
-
+###########################################################################
 #analysis_actives_set()
 
 ###########################################################################

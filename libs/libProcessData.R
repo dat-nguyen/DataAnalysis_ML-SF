@@ -74,13 +74,12 @@ mergeDesc <- function(dataPath, CASFset, trainingSet, createFakeValue = FALSE) {
   #  path123 = paste(dataPath, CASFset,"_elementsv2-SIFt-xscore.csv", sep="")
   #  write.table(mergeData123, file = path123, sep = ",", quote=FALSE, row.names = FALSE)  
 }
-
 ###############################################################
-splitWekaResults <- function(resultPath, classifyMethod, combiName, matchPattern) {
+splitWekaResults <- function(IDPath, classifyMethod, combiName, matchPattern) {
   fileName = paste0(classifyMethod, "_", combiName, "-", DESCRIPTORS[1], "-", DESCRIPTORS[2], ".csv")
   #print(fileName)
-  scores = readWekaResult(resultPath, fileName)
-  IDfile = paste0(PROCESSED_DATA_PATH, combiName, "_", DESCRIPTORS[1], "-", DESCRIPTORS[2], ".csv")
+  scores = readWekaResult(RESULT_PATH, fileName)
+  IDfile = paste0(IDPath, combiName, "_", DESCRIPTORS[1], "-", DESCRIPTORS[2], ".csv")
   IDdata = read.csv(IDfile, na.strings=c(".", "NA", "", "?"))
   predictedData = IDdata[,1:2]
   predictedData[,2] = scores[,2]
@@ -96,7 +95,7 @@ splitWekaResults <- function(resultPath, classifyMethod, combiName, matchPattern
 ###############################################################
 writeMatch2CSV <- function(matchData, classifyMethod, pat) {
   fileName = paste(SPLIT_RESULT_PATH, classifyMethod, "_", pat, ".csv", sep="")
-  print(fileName)
+  #print(fileName)
   write.table(matchData, file = fileName, sep = ",", quote=FALSE, row.names = FALSE)
 }
 ###############################################################
