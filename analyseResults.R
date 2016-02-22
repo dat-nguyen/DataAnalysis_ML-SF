@@ -8,7 +8,6 @@ matchPattern = c("Aminothiazoles_71_PB_md1_rst_Dat", "SmHDAC8_inhibitors",
 
 ###############################################################
 splitAllResults <- function() {
-  ML_METHODS          = c("RoF_REPT", "RoF_RoT", "RF_")
   for (CASFset in CASF_SETS) {
     for (trainSet in TRAINING_SETS) {
       for (method in ML_METHODS) {

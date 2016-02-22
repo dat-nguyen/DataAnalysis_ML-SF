@@ -77,16 +77,16 @@ mergeDesc <- function(dataPath, CASFset, trainingSet, createFakeValue = FALSE) {
 
 ###############################################################
 splitWekaResults <- function(resultPath, classifyMethod, combiName, matchPattern) {
-  fileName = paste(classifyMethod, "_", combiName, "-", DESCRIPTORS[1], "-", DESCRIPTORS[2], ".csv", sep="")
+  fileName = paste0(classifyMethod, "_", combiName, "-", DESCRIPTORS[1], "-", DESCRIPTORS[2], ".csv")
   #print(fileName)
   scores = readWekaResult(resultPath, fileName)
-  IDfile = paste(PROCESSED_DATA_PATH, combiName, "_", DESCRIPTORS[1], "-", DESCRIPTORS[2], ".csv", sep="")
+  IDfile = paste0(PROCESSED_DATA_PATH, combiName, "_", DESCRIPTORS[1], "-", DESCRIPTORS[2], ".csv")
   IDdata = read.csv(IDfile, na.strings=c(".", "NA", "", "?"))
   predictedData = IDdata[,1:2]
   predictedData[,2] = scores[,2]
   for (pat in matchPattern) {
     matchData = predictedData[grep(pat, predictedData[,1]), ]
-    matchData[,1] = sub(paste(pat, "/", sep=""), "\\1", matchData[,1])
+    matchData[,1] = sub(paste0(pat, "/"), "\\1", matchData[,1])
     writeMatch2CSV(matchData, classifyMethod, pat)
   }
   #pat = "[A-Za-z0-9_-]+/"
