@@ -99,11 +99,11 @@ buildAnalysisPercentActives <- function(activesCutoff, typeOfScore="") {
 # DESC: analyse the test set
 ###########################################################################
 analysis_test_set_all <- function(typeOfScore="") {
-    #pdf(paste0(RESULT_PATH, "Sirt2_activespercent",typeOfScore,".pdf"), width = 12, height = 9)
+    pdf(paste0(RESULT_PATH, "Sirt2_activespercent",typeOfScore,".pdf"), width = 12, height = 9)
     par(mfrow = c(1,2))
     cutoffList = c(10, 22)
     sapply(cutoffList, buildAnalysisPercentActives, typeOfScore)
-    #dev.off()
+    dev.off()
 }
 ###########################################################################
 #test <- function() {

@@ -98,6 +98,7 @@ calcFoundActivesPercent <- function(activesCutoff, classifyMethod, target = "T36
     # careful with the minus order sign, minus means sorting descending
     sortedList = totalList[ order(-newScores),]
   }
+  #print(cbind(totalList, newScores))
   activesFile   = paste0(SPLIT_RESULT_PATH, classifyMethod, "_", target,"_actives.csv")
   activesNameList = read.csv(activesFile)[,1]
 
@@ -120,6 +121,6 @@ analysis_actives_set_all <- function(typeOfScore="") {
     dev.off()
 }
 ###########################################################################
-analysis_actives_set_all()
-analysis_actives_set_all(typeOfScore="NormA")
+#analysis_actives_set_all()
+#analysis_actives_set_all(typeOfScore="NormA")
 analysis_actives_set_all(typeOfScore="NormB")

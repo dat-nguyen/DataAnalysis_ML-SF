@@ -14,9 +14,9 @@ TRAINING_SETS       = c("sampling_clusters10", "sampling_100")
 TRAINING_SETS_NAME  = c("setA", "setB")
 ML_METHODS          = c("RoF_REPT", "RoF_RoT", "RF_")
 
-#CASF_NAMES          = c("2007", "2013", "2014")
+CASF_NAMES          = c("2007", "2012", "2013", "2014")
 CASF_YEARS          = c("v2007", "v2012-refined", "v2013-refined", "v2014-refined")
-#CASF_YEARS          = c("v2007", "v2013-refined", "v2014-refined")
+#CASF_YEARS          = c("v2012-refined")
 CASF_SETS           = paste0("CASF", CASF_YEARS)
 ###############################################################
 TARGET_LIST_FIDELE  = c("5P21", "4BBG", "3KKP", "1GS4", "2X9E", "3E37")

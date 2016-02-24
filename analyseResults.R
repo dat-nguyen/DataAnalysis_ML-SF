@@ -37,6 +37,7 @@ createRMSDhistogram <- function(RMSDpath, pattern="sampling_cluster", mainText) 
     RMSD = read.csv(paste0(RMSDpath, CSVfile), header=FALSE)
     RMSDall = rbind(RMSDall, RMSD)
   }
+#  write.table(RMSDall, file=paste0(OUTPUT_RMSD,"2014all.csv"))
   hist(RMSDall[,2], xlab="RMSD", col="lightblue", main=paste0(mainText, "\nNumber of samples: ", length(rownames(RMSDall))) )
 }
 ###############################################################
@@ -63,4 +64,4 @@ plotRMSDhistogram <- function(CASFyear=CASF_YEARS[1]) {
 #splitAllResults()
 #splitAllResults_Fidele()
 #for (CASFyear in CASF_YEARS) 
-plotRMSDhistogram(CASF_YEARS[4]) 
+#plotRMSDhistogram(CASF_YEARS[4]) 

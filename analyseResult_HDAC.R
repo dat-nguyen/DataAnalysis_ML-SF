@@ -66,7 +66,7 @@ buildAnalysisPercentActives <- function(activesCutoff, typeOfScore="") {
   dataSets = c(dataSets, "original scores")
   foundActives = matrix(NA, nrow = length(dataSets), ncol = length(CASF_SETS))
   rownames(foundActives) = dataSets
-  colnames(foundActives) = CASF_SETS
+  colnames(foundActives) = CASF_NAMES
   for (i in seq(length(dataSets))) {
     for (j in seq(length(CASF_SETS))) {
       if (i == length(dataSets)) {
@@ -123,11 +123,11 @@ analysis_test_set_all <- function(typeOfScore="") {
   #nonmatch = !(ligandList[,1] %in% scoreList[,1])
   #print(scoreList[nonmatch,])
   ligandList   = merge(ligandList, scoreList, by.x = 1, by.y = 1)
-  print(ligandList[,2] == 1)
+  #print(ligandList[,2] == 1)
   activesList = ligandList[(ligandList[,2] == 1), c(1,4,3)]
   #ligandList = ligandList[, c(1,4,3)]
 #}
 ###########################################################################
-#analysis_test_set_all()
-#analysis_test_set_all(typeOfScore="NormA")
-#analysis_test_set_all(typeOfScore="NormB")
+analysis_test_set_all()
+analysis_test_set_all(typeOfScore="NormA")
+analysis_test_set_all(typeOfScore="NormB")
